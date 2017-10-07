@@ -12,10 +12,7 @@ public class ClientApp {
         try (
             Socket socket = new Socket("localhost", PORT);
             BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-            PrintWriter out = new PrintWriter(
-                    new BufferedOutputStream(
-                            socket.getOutputStream())
-            );
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
             ObjectInputStream messagesReader = new ObjectInputStream(
                     new BufferedInputStream(
@@ -31,7 +28,8 @@ public class ClientApp {
                 try {
                     messageValidator.validate(message);
                     //TODO: вынести split в отдельный метод
-                    out.println(message.split("\\s+", 2)[1]);
+                    String[] messageParts = message.split("\\s+", 2);
+                    out.writeObject(new Message(messageParts[0], messageParts[1]));
                     out.flush();
                 }catch (InvalidMessageException e) {
                     System.err.println(e.getMessage());

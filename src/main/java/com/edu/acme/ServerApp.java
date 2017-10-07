@@ -14,6 +14,7 @@ public class ServerApp {
         ) {
             while (true) {
                 Socket client = server.accept();
+                System.out.println("qwezxc");
                 new Thread(() -> readFromClient(client)).start();
             }
         } catch (IOException e) {
@@ -22,24 +23,28 @@ public class ServerApp {
     }
 
     private static void readFromClient(Socket client) {
-        System.out.println("New connection");
+        System.out.println("qwecc");
         try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
         ) {
             clientOutList.add(out);
-            String inputMessage;
+            Message m;
             while (true) {
-                inputMessage = in.readLine();
-                System.out.println(inputMessage);
                 System.out.println("New line from user");
-                sendMessageToAllConnectedClients(new Message(inputMessage));
+                m = (Message)in.readObject();
+                System.out.println(m.getText());
+                m.setCurrentTime();
+                sendMessageToAllConnectedClients(m);
             }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         } catch (SocketException t) {
             System.out.println("Connection has been lost");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("New connection");
     }
 
     private static void sendMessageToAllConnectedClients(Message message) {
