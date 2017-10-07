@@ -1,4 +1,4 @@
-package com.edu.acme;
+package com.edu.acme.message;
 
 import com.edu.acme.exception.InvalidMessageException;
 

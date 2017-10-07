@@ -1,6 +1,9 @@
 package com.edu.acme;
 
 import com.edu.acme.exception.InvalidMessageException;
+import com.edu.acme.message.MessageFactory;
+import com.edu.acme.message.MessageValidator;
+import com.edu.acme.message.Validator;
 
 import java.io.*;
 import java.net.Socket;
@@ -30,9 +33,9 @@ public class ClientApp {
                     //TODO: вынести split и if else в отдельный метод
                     String[] messageParts = message.split("\\s+", 2);
                     if(messageParts.length > 1){
-                        out.writeObject(new Message(Command.get(messageParts[0]), messageParts[1]));
+                        out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1]));
                     } else {
-                        out.writeObject(new Message(Command.get(messageParts[0]), null));
+                        out.writeObject(MessageFactory.createMessage(messageParts[0], null));
                     }
                     out.flush();
                 }catch (InvalidMessageException e) {

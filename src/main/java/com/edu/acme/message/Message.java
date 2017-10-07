@@ -1,28 +1,26 @@
-package com.edu.acme;
+package com.edu.acme.message;
+
+import com.edu.acme.Command;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Message implements Serializable{
-    private Command command;
+public abstract class Message implements Serializable{
     private String text;
     private String time;
 
-    public Message(Command command, String text) {
-        this.command = command;
+    public Message(String text) {
         this.text = text;
     }
 
-    public Command getCommand() {
-        return command;
-    }
+    public abstract Command getCommand();
 
     public String getText() {
         return text;
     }
 
-    public String getTime() {
+    private String getTime() {
         return time;
     }
 
@@ -31,6 +29,8 @@ public class Message implements Serializable{
         Date date = new Date(System.currentTimeMillis());
         time = simpleDateFormat.format(date);
     }
+
+    public abstract void process();
 
     @Override
     public String toString() {

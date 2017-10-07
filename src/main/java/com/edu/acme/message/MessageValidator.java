@@ -1,5 +1,6 @@
-package com.edu.acme;
+package com.edu.acme.message;
 
+import com.edu.acme.Command;
 import com.edu.acme.exception.InvalidMessageException;
 import com.edu.acme.exception.TooLongMessageException;
 
