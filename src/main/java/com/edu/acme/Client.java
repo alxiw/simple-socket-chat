@@ -1,56 +1,55 @@
 package com.edu.acme;
 
+import com.edu.acme.exception.InvalidMessageException;
+
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Scanner;
 
 public class Client {
+    private static final int PORT = 9999;
+    private static Validator messageValidator = new MessageValidator();
     public static void main(String[] args) {
         try (
-                Socket client = new Socket("localhost", 9999);
-                DataOutputStream out = new DataOutputStream(client.getOutputStream());
-                DataInputStream in = new DataInputStream(client.getInputStream());
-                Scanner keyboardReader = new Scanner(System.in)
+            Socket socket = new Socket("localhost", PORT);
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+            PrintWriter out = new PrintWriter(
+                    new BufferedOutputStream(
+                            socket.getOutputStream())
+            );
+
+            ObjectInputStream messagesReader = new ObjectInputStream(
+                    new BufferedInputStream(
+                            socket.getInputStream())
+            )
         ) {
             new Thread(() -> {
-                try {
-                    while (true) {
-                        while (true) {
-                            System.out.println(in.readUTF());
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                readMessageLoop(messagesReader);
             }).start();
+
             while (true) {
-                out.writeUTF(keyboardReader.nextLine());
+                String message = consoleReader.readLine();
+                try {
+                    messageValidator.validate(message);
+                    //TODO: вынести split в отдельный метод
+                    out.println(message.split("\\s+", 2)[1]);
+                    out.flush();
+                }catch (InvalidMessageException e) {
+                    System.err.println(e.getMessage());
+                }
             }
-        } catch (ConnectException e) {
-            System.out.println("Can't connect, server is down");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-//    public static void startThreadIn(Socket client) throws IOException, ClassNotFoundException {
-//        try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream((client.getInputStream())))) {
-//            while (true) {
-//                System.out.println("qwe");
-//                System.out.println(((Message)in.readObject()).toString());
-//            }
-//        } catch (SocketException e) {
-//            System.out.println("Lost connection");
-//            System.exit(111);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public static void startThreadOut(PrintWriter out, Scanner in) {
-
+    private static void readMessageLoop(ObjectInputStream messagesReader) {
+        try {
+            while (true){
+                System.out.println(messagesReader.readObject().toString());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
