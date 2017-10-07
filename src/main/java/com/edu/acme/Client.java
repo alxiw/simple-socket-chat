@@ -1,18 +1,16 @@
 package com.edu.acme;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
 
 public class Client {
+    private static final int PORT = 9999;
     public static void main(String[] args) {
         try (
-                Socket client = new Socket("localhost", 9900);
+                Socket client = new Socket("localhost", PORT);
                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
                 Scanner in = new Scanner(System.in)
         ) {
@@ -20,6 +18,8 @@ public class Client {
                 try {
                     startThreadIn(client);
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             });
@@ -34,10 +34,10 @@ public class Client {
 
     }
 
-    public static void startThreadIn(Socket client) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    public static void startThreadIn(Socket client) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream((client.getInputStream())));
         try {
-            while (true) System.out.println(reader.readLine());
+            while (true) System.out.println(((Message)in.readObject()).toString());
         } catch (SocketException e) {
             System.out.println("Lost connection");
             System.exit(111);
