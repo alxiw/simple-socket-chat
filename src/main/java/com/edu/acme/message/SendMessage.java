@@ -2,6 +2,7 @@ package com.edu.acme.message;
 
 import com.edu.acme.Command;
 import com.edu.acme.ServerApp;
+import com.edu.acme.ServerState;
 
 import java.io.*;
 import java.net.SocketException;
@@ -23,7 +24,7 @@ public class SendMessage extends Message {
     @Override
     public void process() {
         this.setCurrentTime();
-        sendMessageToAll(ServerApp.getClientOutList());
+        sendMessageToAll(ServerState.getClientOutList());
         saveToHistory();
     }
 
@@ -41,10 +42,9 @@ public class SendMessage extends Message {
             try {
                 out.writeObject(this);
                 out.flush();
-            } catch (SocketException e){
+            } catch (SocketException e) {
                 clientOutList.remove(out);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

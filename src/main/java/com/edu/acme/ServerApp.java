@@ -6,11 +6,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.LinkedList;
-import java.util.List;
+
 
 public class ServerApp {
-    private static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static final int PORT = 9999;
 
     public static void main(String[] args) {
@@ -30,10 +28,10 @@ public class ServerApp {
                 ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
         ) {
-            clientOutList.add(out);
+            ServerState.addClientOut(out);
             Message m;
             while (true) {
-                m = (Message)in.readObject();
+                m = (Message) in.readObject();
                 m.process();
                 System.out.println("New message " + m.getCommand() + " from user" + m.toString());
             }
@@ -45,9 +43,5 @@ public class ServerApp {
             e.printStackTrace();
         }
         System.out.println("New connection");
-    }
-
-    public static List<ObjectOutputStream> getClientOutList() {
-        return clientOutList;
     }
 }

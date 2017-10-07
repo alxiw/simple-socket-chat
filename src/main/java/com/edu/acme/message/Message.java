@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class Message implements Serializable{
+public abstract class Message implements Serializable {
     private String text;
     private String time;
 
@@ -15,10 +15,6 @@ public abstract class Message implements Serializable{
     }
 
     public abstract Command getCommand();
-
-    public String getText() {
-        return text;
-    }
 
     private String getTime() {
         return time;
@@ -34,7 +30,7 @@ public abstract class Message implements Serializable{
 
     @Override
     public String toString() {
-        return "[" +getTime() + "]: " + getText();
+        return "[" + getTime() + "]: " + text;
     }
 }
 
