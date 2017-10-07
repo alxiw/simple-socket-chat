@@ -3,57 +3,60 @@ package com.edu.acme;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class Server {
-    private static LinkedList<Socket> clientList = new LinkedList<>();
-    private static Queue<Message> messageQueue = new LinkedList<>();
-    private static final int PORT = 9999;
+    private static LinkedList<DataOutputStream> clientOutList = new LinkedList<>();
 
     public static void main(String[] args) {
-        try (ServerSocket server = new ServerSocket(PORT)
+        try (ServerSocket server = new ServerSocket(9999)
         ) {
-            new Thread(Server::sendToClientList);
+//            new Thread(() -> sendToClientList()).start();
             while (true) {
                 Socket client = server.accept();
-                clientList.add(client);
-                new Thread(() -> clientProcess(client)).start();
+                new Thread(() -> readFromClient(client)).start();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void clientProcess(Socket client) {
+    private static void readFromClient(Socket client) {
+        System.out.println("New connection");
+        try (
+                DataInputStream in = new DataInputStream(client.getInputStream());
+                DataOutputStream out = new DataOutputStream(client.getOutputStream())
+        ) {
+            clientOutList.add(out);
+            String inputMessage;
+            while (true) {
+                inputMessage = in.readUTF();
+                System.out.println(inputMessage);
+                System.out.println("New line from user");
+                sendMessageToAllConnectedClients("New message: " + inputMessage);
+            }
+        } catch (SocketException t) {
+            System.out.println("Потеряно соединение");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void sendMessageToAllConnectedClients(String message) {
+        System.out.println("Have " + clientOutList.size() + " clients");
+        for (DataOutputStream out : clientOutList) {
+            sendMessageToClient(message, out);
+        }
+    }
+
+    private static void sendMessageToClient(String message, DataOutputStream out) {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            String message;
-            do {
-                message = in.readLine();
-                messageQueue.add(new Message(message));
-                System.out.println(message);
-
-            } while (message != null);
-
+            out.writeUTF(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void sendToClientList() {
-        while (true) {
-            if (messageQueue.size() > 0) {
-                for (int i = 0; i < clientList.size(); i++) {
-                    try (ObjectOutputStream out = new ObjectOutputStream(clientList.get(i).getOutputStream())) {
-                        out.writeObject(messageQueue.peek());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                messageQueue.poll();
-            }
-        }
-    }
+
 }
