@@ -15,7 +15,6 @@ public class ServerApp {
 //            new Thread(() -> sendToClientList()).start();
             while (true) {
                 Socket client = server.accept();
-                System.out.println("qwezxc");
                 new Thread(() -> readFromClient(client)).start();
             }
         } catch (IOException e) {
@@ -24,7 +23,6 @@ public class ServerApp {
     }
 
     private static void readFromClient(Socket client) {
-        System.out.println("qwecc");
         try (
                 ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
