@@ -27,9 +27,13 @@ public class ClientApp {
                 String message = consoleReader.readLine();
                 try {
                     messageValidator.validate(message);
-                    //TODO: вынести split в отдельный метод
+                    //TODO: вынести split и if else в отдельный метод
                     String[] messageParts = message.split("\\s+", 2);
-                    out.writeObject(new Message(messageParts[0], messageParts[1]));
+                    if(messageParts.length > 1){
+                        out.writeObject(new Message(messageParts[0], messageParts[1]));
+                    } else {
+                        out.writeObject(new Message(messageParts[0], null));
+                    }
                     out.flush();
                 }catch (InvalidMessageException e) {
                     System.err.println(e.getMessage());
@@ -44,7 +48,7 @@ public class ClientApp {
     private static void readMessageLoop(ObjectInputStream messagesReader) {
         try {
             while (true){
-                System.out.println(messagesReader.readObject().toString());
+                    System.out.println(messagesReader.readObject().toString());
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
