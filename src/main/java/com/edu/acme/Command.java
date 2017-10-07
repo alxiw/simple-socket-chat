@@ -1,5 +1,7 @@
 package com.edu.acme;
 
+import java.util.Objects;
+
 public enum Command {
     SEND("/snd"),
     SEND_ALL("/hist"),
@@ -22,6 +24,13 @@ public enum Command {
 
     public String getCommand() {
         return command;
+    }
+
+    public static Command get(String stringCommand) {
+        for(Command s : values()) {
+            if(Objects.equals(s.command, stringCommand)) return s;
+        }
+        return null;
     }
 
 }

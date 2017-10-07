@@ -14,32 +14,16 @@ public class Message implements Serializable{
         this.text = text;
     }
 
-    public Message(String text) {
-        this("", text);
-    }
-
     public String getCommand() {
         return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getTime() {
         return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public void setCurrentTime() {
