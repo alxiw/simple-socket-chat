@@ -12,9 +12,6 @@ public class Message implements Serializable{
     public Message(String command, String text) {
         this.command = command;
         this.text = text;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        time = simpleDateFormat.format(date);
     }
 
     public Message(String text) {
@@ -43,6 +40,12 @@ public class Message implements Serializable{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public void setCurrentTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        time = simpleDateFormat.format(date);
     }
 
     @Override
