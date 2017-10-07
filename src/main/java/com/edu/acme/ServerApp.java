@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
 
-public class Server {
+public class ServerApp {
     private static LinkedList<ObjectOutputStream> clientOutList = new LinkedList<>();
 
     public static void main(String[] args) {
