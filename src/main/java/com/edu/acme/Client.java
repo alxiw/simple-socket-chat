@@ -28,20 +28,26 @@ public class Client {
 
             while (true) {
                 String message = consoleReader.readLine();
-                messageValidator.validate(message);
-                //TODO: вынести split в отдельный метод
-                out.println(message.split("\\s+", 2)[1]);
-                out.flush();
+                try {
+                    messageValidator.validate(message);
+                    //TODO: вынести split в отдельный метод
+                    out.println(message.split("\\s+", 2)[1]);
+                    out.flush();
+                }catch (InvalidMessageException e) {
+                    System.err.println(e.getMessage());
+                }
             }
 
-        } catch (IOException | InvalidMessageException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void readMessageLoop(ObjectInputStream messagesReader) {
         try {
-            System.out.println(messagesReader.readObject().toString());
+            while (true){
+                System.out.println(messagesReader.readObject().toString());
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

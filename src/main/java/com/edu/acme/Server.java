@@ -53,6 +53,7 @@ public class Server {
     private static void sendMessageToClient(Message message, ObjectOutputStream out) {
         try {
             out.writeObject(message);
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
