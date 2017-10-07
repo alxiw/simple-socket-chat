@@ -9,9 +9,10 @@ import java.util.LinkedList;
 public class ServerApp {
     private static LinkedList<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static File messageHistoryPath = new File("history.ser");
+    private static final int PORT = 9999;
 
     public static void main(String[] args) {
-        try (ServerSocket server = new ServerSocket(9999)
+        try (ServerSocket server = new ServerSocket(PORT)
         ) {
             while (true) {
                 Socket client = server.accept();

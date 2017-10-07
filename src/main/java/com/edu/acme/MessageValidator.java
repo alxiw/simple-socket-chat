@@ -16,7 +16,7 @@ public class MessageValidator implements Validator {
         } catch (IllegalArgumentException e){
             throw new InvalidMessageException(INVALID_COMMAND_MESSAGE, e);
         }
-        if(messageArr[1].length() > MAX_MESSAGE_LENGTH)
+        if(messageArr.length > 1 && messageArr[1].length() > MAX_MESSAGE_LENGTH)
             throw new TooLongMessageException(TOO_LONG_MESSAGE);
     }
 }
