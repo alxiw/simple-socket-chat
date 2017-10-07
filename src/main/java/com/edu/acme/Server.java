@@ -12,7 +12,6 @@ public class Server {
     public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(9999)
         ) {
-//            new Thread(() -> sendToClientList()).start();
             while (true) {
                 Socket client = server.accept();
                 new Thread(() -> readFromClient(client)).start();
@@ -37,7 +36,7 @@ public class Server {
                 sendMessageToAllConnectedClients(new Message(inputMessage));
             }
         } catch (SocketException t) {
-            System.out.println("Потеряно соединение");
+            System.out.println("Connection has been lost");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,7 +53,10 @@ public class Server {
         try {
             out.writeObject(message);
             out.flush();
-        } catch (IOException e) {
+        } catch (SocketException e){
+            clientOutList.remove(out);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
