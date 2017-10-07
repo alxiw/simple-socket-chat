@@ -6,19 +6,20 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
 
+@SuppressWarnings("InfiniteLoopStatement")
 public class Server {
     private static LinkedList<Socket> clientList = new LinkedList<>();
     private static Queue<Message> messageQueue = new LinkedList<>();
     private static final int PORT = 9999;
 
     public static void main(String[] args) {
-        try (ServerSocket server = new ServerSocket(PORT)
-        ) {
-            new Thread(Server::sendToClientList);
+        try {
+            ServerSocket server = new ServerSocket(PORT);
+            new Thread(Server::sendToClientList).start();
             while (true) {
                 Socket client = server.accept();
                 clientList.add(client);
-                new Thread(() -> clientProcess(client)).start();
+                new Thread(() -> clientLoop(client)).start();
             }
 
         } catch (IOException e) {
@@ -26,18 +27,16 @@ public class Server {
         }
     }
 
-    private static void clientProcess(Socket client) {
+    private static void clientLoop(Socket client) {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            String message;
-            do {
-                message = in.readLine();
-                messageQueue.add(new Message(message));
-                System.out.println(message);
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            while(true){
+                Message message = (Message) in.readObject();
+                messageQueue.add(message);
+            }
 
-            } while (message != null);
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
