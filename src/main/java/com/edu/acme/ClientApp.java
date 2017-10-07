@@ -5,7 +5,7 @@ import com.edu.acme.exception.InvalidMessageException;
 import java.io.*;
 import java.net.Socket;
 
-public class Client {
+public class ClientApp {
     private static final int PORT = 9999;
     private static Validator messageValidator = new MessageValidator();
     public static void main(String[] args) {
