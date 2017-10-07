@@ -30,9 +30,9 @@ public class ClientApp {
                     //TODO: вынести split и if else в отдельный метод
                     String[] messageParts = message.split("\\s+", 2);
                     if(messageParts.length > 1){
-                        out.writeObject(new Message(messageParts[0], messageParts[1]));
+                        out.writeObject(new Message(Command.get(messageParts[0]), messageParts[1]));
                     } else {
-                        out.writeObject(new Message(messageParts[0], null));
+                        out.writeObject(new Message(Command.get(messageParts[0]), null));
                     }
                     out.flush();
                 }catch (InvalidMessageException e) {

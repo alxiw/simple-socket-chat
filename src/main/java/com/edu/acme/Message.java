@@ -5,16 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message implements Serializable{
-    private String command;
+    private Command command;
     private String text;
     private String time;
 
-    public Message(String command, String text) {
+    public Message(Command command, String text) {
         this.command = command;
         this.text = text;
     }
 
-    public String getCommand() {
+    public Command getCommand() {
         return command;
     }
 
