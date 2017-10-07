@@ -7,10 +7,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ServerApp {
-    private static LinkedList<ObjectOutputStream> clientOutList = new LinkedList<>();
-    private static File messageHistoryPath = new File("history.ser");
+    private static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static final int PORT = 9999;
 
     public static void main(String[] args) {
@@ -33,11 +33,9 @@ public class ServerApp {
             clientOutList.add(out);
             Message m;
             while (true) {
-                System.out.println("New line from user");
                 m = (Message)in.readObject();
-                System.out.println(m.getText());
-                m.setCurrentTime();
-                sendMessageToAllConnectedClients(m);
+                m.process();
+                System.out.println("New message " + m.getCommand() + " from user" + m.toString());
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -49,31 +47,7 @@ public class ServerApp {
         System.out.println("New connection");
     }
 
-    private static void sendMessageToAllConnectedClients(Message message) {
-        System.out.println("Have " + clientOutList.size() + " clients");
-        for (ObjectOutputStream out : clientOutList) {
-            sendMessageToClient(message, out);
-        }
+    public static List<ObjectOutputStream> getClientOutList() {
+        return clientOutList;
     }
-
-    private static void sendMessageToClient(Message message, ObjectOutputStream out) {
-        try {
-            out.writeObject(message);
-            out.flush();
-        } catch (SocketException e){
-            clientOutList.remove(out);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void saveMessageToHistory(Message message) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(messageHistoryPath))) {
-            out.writeObject(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
