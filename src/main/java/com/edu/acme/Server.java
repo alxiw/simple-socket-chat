@@ -3,56 +3,60 @@ package com.edu.acme;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.LinkedList;
-import java.util.Queue;
 
-@SuppressWarnings("InfiniteLoopStatement")
 public class Server {
-    private static LinkedList<Socket> clientList = new LinkedList<>();
-    private static Queue<Message> messageQueue = new LinkedList<>();
-    private static final int PORT = 9999;
+    private static LinkedList<ObjectOutputStream> clientOutList = new LinkedList<>();
 
     public static void main(String[] args) {
-        try {
-            ServerSocket server = new ServerSocket(PORT);
-            new Thread(Server::sendToClientList).start();
+        try (ServerSocket server = new ServerSocket(9999)
+        ) {
+//            new Thread(() -> sendToClientList()).start();
             while (true) {
                 Socket client = server.accept();
-                clientList.add(client);
-                new Thread(() -> clientLoop(client)).start();
+                new Thread(() -> readFromClient(client)).start();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void clientLoop(Socket client) {
-        try {
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-            while(true){
-                Message message = (Message) in.readObject();
-                messageQueue.add(message);
+    private static void readFromClient(Socket client) {
+        System.out.println("New connection");
+        try (
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
+        ) {
+            clientOutList.add(out);
+            String inputMessage;
+            while (true) {
+                inputMessage = in.readLine();
+                System.out.println(inputMessage);
+                System.out.println("New line from user");
+                sendMessageToAllConnectedClients(new Message(inputMessage));
             }
-
-
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (SocketException t) {
+            System.out.println("Потеряно соединение");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void sendToClientList() {
-        while (true) {
-            if (messageQueue.size() > 0) {
-                for (int i = 0; i < clientList.size(); i++) {
-                    try (ObjectOutputStream out = new ObjectOutputStream(clientList.get(i).getOutputStream())) {
-                        out.writeObject(messageQueue.peek());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                messageQueue.poll();
-            }
+    private static void sendMessageToAllConnectedClients(Message message) {
+        System.out.println("Have " + clientOutList.size() + " clients");
+        for (ObjectOutputStream out : clientOutList) {
+            sendMessageToClient(message, out);
         }
     }
+
+    private static void sendMessageToClient(Message message, ObjectOutputStream out) {
+        try {
+            out.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

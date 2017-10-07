@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Client {
     private static final int PORT = 9999;
-    private static Validator commandValidator = new MessageValidator();
+    private static Validator messageValidator = new MessageValidator();
     public static void main(String[] args) {
         try (
             Socket socket = new Socket("localhost", PORT);
@@ -28,8 +28,9 @@ public class Client {
 
             while (true) {
                 String message = consoleReader.readLine();
-                commandValidator.validate(message);
-                out.println(message);
+                messageValidator.validate(message);
+                //TODO: вынести split в отдельный метод
+                out.println(message.split("\\s+", 2)[1]);
                 out.flush();
             }
 

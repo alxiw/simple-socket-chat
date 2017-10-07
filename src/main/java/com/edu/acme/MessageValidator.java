@@ -10,7 +10,7 @@ public class MessageValidator implements Validator {
     private static final String TOO_LONG_MESSAGE = "Your message is too long.";
     @Override
     public void validate(String message) throws InvalidMessageException {
-        String[] messageArr = message.split(" ", 1);
+        String[] messageArr = message.split("\\s+", 2);
         if (!messageArr[0].equals(COMMAND))
             throw new InvalidMessageException(INVALID_COMMAND_MESSAGE);
         if(messageArr[1].length() > MAX_MESSAGE_LENGTH)

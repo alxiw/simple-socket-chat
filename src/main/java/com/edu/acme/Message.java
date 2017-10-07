@@ -14,7 +14,7 @@ public class Message implements Serializable{
 
     @Override
     public String toString() {
-        return message + dateTime.toString();
+        return dateTime.toString() + System.lineSeparator() + message + System.lineSeparator();
     }
 }
 
