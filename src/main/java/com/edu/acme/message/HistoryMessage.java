@@ -8,8 +8,6 @@ import com.edu.acme.UserInfo;
 import java.io.*;
 import java.util.LinkedList;
 
-import static com.edu.acme.ServerState.getMessageHistoryPath;
-
 public class HistoryMessage extends Message {
     private Command command = Command.HISTORY;
 
