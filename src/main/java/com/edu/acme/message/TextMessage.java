@@ -42,7 +42,6 @@ public class TextMessage extends Message {
                 e.printStackTrace();
             }
         }
-        saveToHistory(out);
     }
 
     private void saveToHistory(ObjectOutputStream out) {

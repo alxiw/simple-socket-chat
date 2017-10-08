@@ -13,6 +13,7 @@ public class History {
     public static void saveMessage(Message message, String filename) {
         Gson gson = new Gson();
         try (PrintWriter out = new PrintWriter(new FileOutputStream(getPath(filename).toString(), true))) {
+            System.out.println("write");
             out.println(gson.toJson(message));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -35,7 +36,6 @@ public class History {
     }
 
     private static Path getPath(String filename) {
-        System.out.println(Paths.get("history", filename));
         return Paths.get("history", filename + ".ser");
     }
 }
