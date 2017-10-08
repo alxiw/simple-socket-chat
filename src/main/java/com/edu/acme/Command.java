@@ -8,7 +8,8 @@ import java.util.Objects;
 public enum Command {
     SEND("/snd"),
     HISTORY("/hist"),
-    REGISTER("/chid");
+    REGISTER("/chid"),
+    CHANGE_ROOM("/chroom");
 
     private final String command;
 

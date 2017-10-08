@@ -16,7 +16,9 @@ public class MessageFactory {
             return new HistoryMessage(text, out);
         } else if (command == Command.REGISTER){
             return new LoginMessage(text, out);
-        } else {
+        } else if (command == Command.CHANGE_ROOM){
+            return new ChangeRoomMessage(text, out);
+        }else {
             return null;
         }
     }

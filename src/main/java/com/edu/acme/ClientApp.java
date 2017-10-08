@@ -1,9 +1,7 @@
 package com.edu.acme;
 
-import com.edu.acme.message.Message;
 import com.edu.acme.message.MessageFactory;
 import com.edu.acme.message.MessageValidator;
-import com.edu.acme.message.Validator;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,7 +12,7 @@ public class ClientApp {
     }
 
     private static final int PORT = 9999;
-    private static Validator messageValidator = new MessageValidator();
+    private static MessageValidator messageValidator = new MessageValidator();
     public static void main(String[] args) {
         try (
             Socket socket = new Socket("localhost", PORT);

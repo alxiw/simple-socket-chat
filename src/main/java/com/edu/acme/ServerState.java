@@ -4,13 +4,14 @@ import com.edu.acme.message.Message;
 
 import java.io.File;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 public class ServerState {
     private volatile static long anonUserCount = 0;
     private ServerState() {
     }
+
+    public static final String DEFAULT_ROOM = "default";
 
     private volatile static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static File messageHistoryPath = new File("history.ser");
@@ -22,11 +23,11 @@ public class ServerState {
 
     private volatile static Set<String> loginSet = new HashSet<>();
 
-    public static Map<ObjectOutputStream, String> getUserStreamMap() {
+    public static Map<ObjectOutputStream, UserInfo> getUserStreamMap() {
         return userStreamMap;
     }
 
-    private volatile static Map<ObjectOutputStream, String> userStreamMap = new HashMap<>();
+    private volatile static Map<ObjectOutputStream, UserInfo> userStreamMap = new HashMap<>();
 
     public static List<ObjectOutputStream> getClientOutList() {
         //return clientOutList;
@@ -42,11 +43,11 @@ public class ServerState {
     }*/
 
     public static void addClientOut(ObjectOutputStream out){
-        String userName = userStreamMap.get(out);
-        if (userName == null){
-            userName = getAnonymousName();
+        UserInfo userInfo = userStreamMap.get(out);
+        if (userInfo == null){
+            userInfo = new UserInfo(getAnonymousName());
         }
-        userStreamMap.putIfAbsent(out, userName);
+        userStreamMap.putIfAbsent(out, userInfo);
     }
 
     private static String getAnonymousName() {
@@ -59,10 +60,6 @@ public class ServerState {
 
     public static void addNewUser(String username){
         loginSet.add(username);
-    }
-
-    public static void addUserOutputStream(ObjectOutputStream out, String username){
-        userStreamMap.put(out, username);
     }
 
     public static File getMessageHistoryPath() {
