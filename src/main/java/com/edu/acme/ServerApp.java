@@ -12,7 +12,7 @@ public class ServerApp {
     private ServerApp() {
     }
 
-    private static final int PORT = 9999;
+    private static final int PORT = Config.PORT;
 
     public static void main(String[] args) {
         try (ServerSocket server = new ServerSocket(PORT)

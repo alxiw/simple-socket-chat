@@ -11,7 +11,7 @@ public class ClientApp {
     private ClientApp() {
     }
 
-    private static final int PORT = 9999;
+    private static final int PORT = Config.PORT;
     private static MessageValidator messageValidator = new MessageValidator();
     public static void main(String[] args) {
         try (
