@@ -1,6 +1,7 @@
 package com.edu.acme.message;
 
 import com.edu.acme.Command;
+import com.edu.acme.History;
 import com.edu.acme.ServerState;
 import com.edu.acme.UserInfo;
 
@@ -37,20 +38,13 @@ public class TextMessage extends Message {
                 e.printStackTrace();
             }
         }
-
-        saveToHistory();
+        saveToHistory(out);
     }
 
-    private void saveToHistory() {
-//        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ServerState.getMessageHistoryPath(),
-//                true))) {
-//            out.writeObject(this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        if (this.command == Command.SEND) {
-            ServerState.messageHistory.add(this);
-        }
+    private void saveToHistory(ObjectOutputStream out) {
+        UserInfo userInfo = ServerState.getUserStreamMap().get(out);
+        String room = userInfo.getRoom();
+        History.saveMessage(this, room);
     }
 
 }
