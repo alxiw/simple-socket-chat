@@ -2,6 +2,8 @@ package com.edu.acme.message;
 
 import com.edu.acme.Command;
 
+import java.io.ObjectOutputStream;
+
 public class ServerMessage extends Message {
     public ServerMessage(String text) {
         super(text);
@@ -13,7 +15,8 @@ public class ServerMessage extends Message {
     }
 
     @Override
-    public void process() {
+    public void process(ObjectOutputStream out) {
 
     }
+
 }

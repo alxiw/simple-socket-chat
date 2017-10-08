@@ -24,7 +24,7 @@ public class LoginMessage extends Message {
     }
 
     @Override
-    public void process() {
+    public void process(ObjectOutputStream out) {
         if (ServerState.userExist(text)) {
             System.out.println(USER_NAME_ALREADY_IN_USE_MESSAGE);
             try {

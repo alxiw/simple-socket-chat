@@ -9,7 +9,6 @@ import static com.edu.acme.ServerState.getMessageHistoryPath;
 
 public class HistoryMessage extends Message {
     private Command command = Command.HISTORY;
-    private ObjectOutputStream out;
 
     public HistoryMessage(String text, ObjectOutputStream out) {
         super(text);
