@@ -26,6 +26,11 @@ public class TextMessage extends Message {
     public void process(ObjectOutputStream out) {
         this.setCurrentTime();
         this.setText(ServerState.getUserStreamMap().get(out).getUsername() + ": " + text);
+        sendMessageToAllRoomUsers(out);
+        saveToHistory();
+    }
+
+    private void sendMessageToAllRoomUsers(ObjectOutputStream out) {
         UserInfo userInfo = ServerState.getUserStreamMap().get(out);
         for (Map.Entry<ObjectOutputStream, UserInfo> entry : ServerState.getUserStreamMap().entrySet()){
             try {
