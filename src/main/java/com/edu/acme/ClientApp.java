@@ -7,12 +7,29 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * Класс, реализующий клиентскую часть приложения
+ */
 public class ClientApp {
+    /**
+     * Пустой приватный класс для предотвращения создания экземпляра класса
+     */
     private ClientApp() {
     }
 
-    private static final int PORT = Config.PORT;
+    /**
+     * Поле, хранящее номер порта сокета
+     */
+    private static final int PORT = 9999;
+
+    /**
+     * Создание валидатора сообщений
+     */
     private static MessageValidator messageValidator = new MessageValidator();
+
+    /**
+     * Главный метод, запускающий клиентскую часть приложения
+     */
     public static void main(String[] args) {
         try (
             Socket socket = new Socket("localhost", PORT);
@@ -36,6 +53,9 @@ public class ClientApp {
         }
     }
 
+    /**
+     * Метод, позволяющий серверу создавать сообщения и отправлять их клиентам
+     */
     private static void createMessageAndSend(ObjectOutputStream out, String message) throws IOException {
         String errorMessage = messageValidator.getErrorDescription(message);
         if (errorMessage == null) {
@@ -51,6 +71,9 @@ public class ClientApp {
         }
     }
 
+    /**
+     * Метод, позволяющий принимать сообщения сервера
+     */
     private static void readMessageLoop(ObjectInputStream messagesReader) {
         try {
             while (true){
@@ -58,14 +81,6 @@ public class ClientApp {
             }
         } catch (SocketException e) {
             System.err.println("Lost connection");
-//            try {
-//                Thread.sleep(10_000);
-//                System.err.println("Try to reconnect");
-//                readMessageLoop(messagesReader);
-//            } catch (InterruptedException e1) {
-//                e1.printStackTrace();
-//            }
-//            System.exit(1);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
