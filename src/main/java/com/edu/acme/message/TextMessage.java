@@ -27,7 +27,7 @@ public class TextMessage extends Message {
         this.setCurrentTime();
         this.setText(ServerState.getUserStreamMap().get(out).getUsername() + ": " + text);
         sendMessageToAllRoomUsers(out);
-        saveToHistory();
+        saveToHistory(out);
     }
 
     private void sendMessageToAllRoomUsers(ObjectOutputStream out) {
