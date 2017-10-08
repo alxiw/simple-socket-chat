@@ -36,6 +36,6 @@ public class History {
     }
 
     private static Path getPath(String filename) {
-        return Paths.get("history", filename + ".ser");
+        return Paths.get(filename + ".ser");
     }
 }
