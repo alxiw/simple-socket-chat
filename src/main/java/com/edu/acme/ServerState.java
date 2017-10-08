@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.util.*;
 
 public class ServerState {
+    private ServerState() {
+    }
+
     private volatile static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static File messageHistoryPath = new File("history.ser");
     public volatile static LinkedList<Message> messageHistory = new LinkedList<>();

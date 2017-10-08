@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class ClientApp {
+    private ClientApp() {
+    }
+
     private static final int PORT = 9999;
     private static Validator messageValidator = new MessageValidator();
     public static void main(String[] args) {

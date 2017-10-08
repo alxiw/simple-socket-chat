@@ -8,11 +8,6 @@ import com.edu.acme.Command;
 public class MessageValidator implements Validator {
     private static final int MAX_MESSAGE_LENGTH = 150;
 
-    /**
-     * Проверяет, является ли message корректным сообщением для сервера
-     *
-     * @param message сообщение, которое необходимо проверить
-     */
     @Override
     public boolean validate(String message) {
 //        String[] messageArr = message.split("\\s+", 2);
@@ -22,6 +17,11 @@ public class MessageValidator implements Validator {
         return true;
     }
 
+    /**
+     * Проверяет, является ли message корректным сообщением для сервера
+     * @param message сообщение, которое необходимо проверить
+     * @return возвращает строку с описанием ошибки
+     */
     public String getErrorDescription(String message) {
         String[] messageArr = message.split("\\s+", 2);
         if (Command.get(messageArr[0]) == null) {
