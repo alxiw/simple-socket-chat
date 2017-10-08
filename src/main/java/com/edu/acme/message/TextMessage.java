@@ -1,18 +1,17 @@
 package com.edu.acme.message;
 
 import com.edu.acme.Command;
-import com.edu.acme.ServerApp;
 import com.edu.acme.ServerState;
 
 import java.io.*;
 import java.net.SocketException;
 import java.util.List;
 
-public class SendMessage extends Message {
+public class TextMessage extends Message {
     private final Command command = Command.SEND;
     private static File messageHistoryPath = new File("history.ser");
 
-    public SendMessage(String text) {
+    public TextMessage(String text) {
         super(text);
     }
 

@@ -5,7 +5,7 @@ import com.edu.acme.Command;
 public class MessageFactory {
     public static Message createMessage(Command command, String text) {
         if (command == Command.SEND) {
-            return new SendMessage(text);
+            return new TextMessage(text);
         } else {
             return null;
         }

@@ -30,11 +30,11 @@ public class ServerApp {
                 ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
         ) {
             ServerState.addClientOut(out);
-            Message m;
+            Message message;
             while (true) {
-                m = (Message) in.readObject();
-                m.process();
-                System.out.println("New message " + m.getCommand() + " from user" + m.toString());
+                message = (Message) in.readObject();
+                message.process();
+                System.out.println("New message " + message.getCommand() + " from user" + message.toString());
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
