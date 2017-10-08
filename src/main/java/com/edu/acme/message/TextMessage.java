@@ -7,7 +7,6 @@ import com.edu.acme.UserInfo;
 
 import java.io.*;
 import java.net.SocketException;
-import java.util.List;
 import java.util.Map;
 
 public class TextMessage extends Message {

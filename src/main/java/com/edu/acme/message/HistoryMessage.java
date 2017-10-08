@@ -8,8 +8,6 @@ import com.edu.acme.UserInfo;
 import java.io.*;
 import java.util.LinkedList;
 
-import static com.edu.acme.ServerState.getMessageHistoryPath;
-
 public class HistoryMessage extends Message {
     private Command command = Command.HISTORY;
 
@@ -27,7 +25,7 @@ public class HistoryMessage extends Message {
     public void process(ObjectOutputStream out) {
         UserInfo userInfo = ServerState.getUserStreamMap().get(out);
         String room = userInfo.getRoom();
-        LinkedList<TextMessage> messages = History.readMessages(room, 5);
+        LinkedList<TextMessage> messages = History.readMessages(room);
         if (messages.size() == 0) {
             try {
                 out.writeObject(new ServerMessage("History is empty"));

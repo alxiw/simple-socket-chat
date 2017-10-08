@@ -1,8 +1,5 @@
 package com.edu.acme;
 
-import com.edu.acme.message.Message;
-
-import java.io.File;
 import java.io.ObjectOutputStream;
 import java.util.*;
 
@@ -12,9 +9,6 @@ public class ServerState {
     }
 
     public static final String DEFAULT_ROOM = "default";
-
-    private static File messageHistoryPath = new File("history.ser");
-    public volatile static LinkedList<Message> messageHistory = new LinkedList<>();
 
     public static Set<String> getLoginSet() {
         return loginSet;
@@ -47,9 +41,5 @@ public class ServerState {
 
     public static void addNewUser(String username){
         loginSet.add(username);
-    }
-
-    public static File getMessageHistoryPath() {
-        return messageHistoryPath;
     }
 }
