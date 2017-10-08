@@ -37,12 +37,11 @@ public class ClientApp {
     private static void createMessageAndSend(ObjectOutputStream out, String message) throws IOException {
         try {
             messageValidator.validate(message);
-            //TODO: вынести split и if else в отдельный метод
             String[] messageParts = message.split("\\s+", 2);
             if(messageParts.length > 1){
-                out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1]));
+                out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1], out));
             } else {
-                out.writeObject(MessageFactory.createMessage(messageParts[0], null));
+                out.writeObject(MessageFactory.createMessage(messageParts[0], null, out));
             }
             out.flush();
         }catch (InvalidMessageException e) {

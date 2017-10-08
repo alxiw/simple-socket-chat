@@ -3,6 +3,7 @@ package com.edu.acme.message;
 import com.edu.acme.Command;
 import com.edu.acme.ServerApp;
 import com.edu.acme.ServerState;
+import com.sun.corba.se.spi.activation.Server;
 
 import java.io.*;
 import java.net.SocketException;
@@ -24,6 +25,7 @@ public class SendMessage extends Message {
     @Override
     public void process() {
         this.setCurrentTime();
+        this.setText(ServerState.getUserStreamMap().get(out) + ": " + text);
         sendMessageToAll(ServerState.getClientOutList());
         saveToHistory();
     }
