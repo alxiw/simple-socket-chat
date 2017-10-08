@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class ClientApp {
+    private ClientApp() {
+    }
+
     private static final int PORT = 9999;
     private static Validator messageValidator = new MessageValidator();
     public static void main(String[] args) {
@@ -40,9 +43,9 @@ public class ClientApp {
         if (errorMessage == null) {
             String[] messageParts = message.split("\\s+", 2);
             if(messageParts.length > 1){
-                out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1], out));
+                out.writeObject(MessageFactory.createMessage(Command.get(messageParts[0]), messageParts[1], out));
             } else {
-                out.writeObject(MessageFactory.createMessage(messageParts[0], null, out));
+                out.writeObject(MessageFactory.createMessage(Command.get(messageParts[0]), null, out));
             }
             out.flush();
         } else {

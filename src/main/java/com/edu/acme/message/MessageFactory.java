@@ -6,6 +6,9 @@ import java.io.ObjectOutputStream;
 
 
 public class MessageFactory {
+    private MessageFactory() {
+    }
+
     public static Message createMessage(Command command, String text, ObjectOutputStream out) {
         if (command == Command.SEND) {
             return new TextMessage(text);
@@ -16,9 +19,5 @@ public class MessageFactory {
         } else {
             return null;
         }
-    }
-
-    public static Message createMessage(String command, String text, ObjectOutputStream out){
-        return createMessage(Command.get(command), text, out);
     }
 }

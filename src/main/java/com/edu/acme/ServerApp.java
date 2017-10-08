@@ -9,6 +9,9 @@ import java.net.SocketException;
 
 
 public class ServerApp {
+    private ServerApp() {
+    }
+
     private static final int PORT = 9999;
 
     public static void main(String[] args) {
