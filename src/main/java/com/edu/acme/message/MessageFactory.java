@@ -3,6 +3,9 @@ package com.edu.acme.message;
 import com.edu.acme.Command;
 
 public class MessageFactory {
+    private MessageFactory() {
+    }
+
     public static Message createMessage(Command command, String text) {
         if (command == Command.SEND) {
             return new TextMessage(text);
