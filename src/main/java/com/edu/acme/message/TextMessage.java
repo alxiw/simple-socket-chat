@@ -1,7 +1,6 @@
 package com.edu.acme.message;
 
 import com.edu.acme.Command;
-import com.edu.acme.ServerApp;
 import com.edu.acme.ServerState;
 import com.sun.corba.se.spi.activation.Server;
 
@@ -9,11 +8,10 @@ import java.io.*;
 import java.net.SocketException;
 import java.util.List;
 
-public class SendMessage extends Message {
+public class TextMessage extends Message {
     private final Command command = Command.SEND;
-    private static File messageHistoryPath = new File("history.ser");
 
-    public SendMessage(String text) {
+    public TextMessage(String text) {
         super(text);
     }
 
@@ -23,7 +21,7 @@ public class SendMessage extends Message {
     }
 
     @Override
-    public void process() {
+    public void process(ObjectOutputStream out) {
         this.setCurrentTime();
         this.setText(ServerState.getUserStreamMap().get(out) + ": " + text);
         sendMessageToAll(ServerState.getClientOutList());
@@ -31,10 +29,14 @@ public class SendMessage extends Message {
     }
 
     private void saveToHistory() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(messageHistoryPath, true))) {
-            out.writeObject(this);
-        } catch (IOException e) {
-            e.printStackTrace();
+//        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ServerState.getMessageHistoryPath(),
+//                true))) {
+//            out.writeObject(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        if (this.command == Command.SEND) {
+            ServerState.messageHistory.add(this);
         }
     }
 
