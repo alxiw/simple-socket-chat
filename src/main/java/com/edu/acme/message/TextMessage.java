@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TextMessage extends Message {
     private final Command command = Command.SEND;
-    private static File messageHistoryPath = new File("history.ser");
 
     public TextMessage(String text) {
         super(text);
@@ -21,17 +20,21 @@ public class TextMessage extends Message {
     }
 
     @Override
-    public void process() {
+    public void process(ObjectOutputStream out) {
         this.setCurrentTime();
         sendMessageToAll(ServerState.getClientOutList());
         saveToHistory();
     }
 
     private void saveToHistory() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(messageHistoryPath, true))) {
-            out.writeObject(this);
-        } catch (IOException e) {
-            e.printStackTrace();
+//        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ServerState.getMessageHistoryPath(),
+//                true))) {
+//            out.writeObject(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        if (this.command == Command.SEND) {
+            ServerState.messageHistory.add(this);
         }
     }
 

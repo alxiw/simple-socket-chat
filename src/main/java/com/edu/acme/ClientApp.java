@@ -1,5 +1,6 @@
 package com.edu.acme;
 
+import com.edu.acme.message.Message;
 import com.edu.acme.message.MessageFactory;
 import com.edu.acme.message.MessageValidator;
 import com.edu.acme.message.Validator;
@@ -38,7 +39,11 @@ public class ClientApp {
         String errorMessage = messageValidator.getErrorDescription(message);
         if (errorMessage == null) {
             String[] messageParts = message.split("\\s+", 2);
-            out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1]));
+            if (messageParts.length > 1) {
+                out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1], null));
+            } else {
+                out.writeObject(MessageFactory.createMessage(messageParts[0], null, null));
+            }
             out.flush();
         } else {
             System.out.println(errorMessage);
@@ -52,6 +57,13 @@ public class ClientApp {
             }
         } catch (SocketException e) {
             System.err.println("Lost connection");
+//            try {
+//                Thread.sleep(10_000);
+//                System.err.println("Try to reconnect");
+//                readMessageLoop(messagesReader);
+//            } catch (InterruptedException e1) {
+//                e1.printStackTrace();
+//            }
 //            System.exit(1);
         }
         catch (IOException | ClassNotFoundException e) {
