@@ -33,9 +33,8 @@ public class ServerApp {
             Message message;
             while (true) {
                 message = (Message) in.readObject();
-                message.setOutputStream(out);
-                message.process();
-                System.out.println("New message " + message.getCommand() + " from user" + message.toString());
+                message.process(out);
+                System.out.println("New message " + message.getCommand() + " from user" + message.toString() + "proceeded");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

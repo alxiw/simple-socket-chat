@@ -1,12 +1,13 @@
 package com.edu.acme;
 
-import com.edu.acme.exception.InvalidMessageException;
+import com.edu.acme.message.Message;
 import com.edu.acme.message.MessageFactory;
 import com.edu.acme.message.MessageValidator;
 import com.edu.acme.message.Validator;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientApp {
     private static final int PORT = 9999;
@@ -30,13 +31,13 @@ public class ClientApp {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Lost connection");
         }
     }
 
     private static void createMessageAndSend(ObjectOutputStream out, String message) throws IOException {
-        try {
-            messageValidator.validate(message);
+        String errorMessage = messageValidator.getErrorDescription(message);
+        if (errorMessage == null) {
             String[] messageParts = message.split("\\s+", 2);
             if(messageParts.length > 1){
                 out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1], out));
@@ -44,17 +45,28 @@ public class ClientApp {
                 out.writeObject(MessageFactory.createMessage(messageParts[0], null, out));
             }
             out.flush();
-        }catch (InvalidMessageException e) {
-            System.err.println(e.getMessage());
+        } else {
+            System.out.println(errorMessage);
         }
     }
 
     private static void readMessageLoop(ObjectInputStream messagesReader) {
         try {
             while (true){
-                    System.out.println(messagesReader.readObject().toString());
+                System.out.println(messagesReader.readObject().toString());
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (SocketException e) {
+            System.err.println("Lost connection");
+//            try {
+//                Thread.sleep(10_000);
+//                System.err.println("Try to reconnect");
+//                readMessageLoop(messagesReader);
+//            } catch (InterruptedException e1) {
+//                e1.printStackTrace();
+//            }
+//            System.exit(1);
+        }
+        catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

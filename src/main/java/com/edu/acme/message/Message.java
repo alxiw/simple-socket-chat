@@ -3,6 +3,7 @@ package com.edu.acme.message;
 import com.edu.acme.Command;
 
 import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,8 +53,7 @@ public abstract class Message implements Serializable {
         time = simpleDateFormat.format(date);
     }
 
-    public abstract void process();
-
+    public abstract void process(ObjectOutputStream out);
 
     @Override
     public String toString() {
