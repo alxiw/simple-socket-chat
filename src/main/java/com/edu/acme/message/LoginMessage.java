@@ -6,6 +6,8 @@ import com.edu.acme.ServerState;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
+import java.util.List;
 
 public class LoginMessage extends Message {
     private static final String USER_NAME_ALREADY_IN_USE_MESSAGE = "This username is already in use";
@@ -36,9 +38,23 @@ public class LoginMessage extends Message {
         }
         ServerState.addNewUser(text);
         String prevUserName = ServerState.getUserStreamMap().get(out);
+
         if(out != null){
-            ServerState.getLoginSet().remove(prevUserName);
+            handleNameChange(prevUserName);
         }
+
         ServerState.getUserStreamMap().replace(out, text);
+    }
+
+    private void handleNameChange(String prevUserName) {
+        ServerState.getLoginSet().remove(prevUserName);
+        try {
+            for (ObjectOutputStream outputStream : ServerState.getClientOutList()) {
+                outputStream.writeObject(new ServerMessage(
+                        "user " + prevUserName + " changed name to " + text));
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
