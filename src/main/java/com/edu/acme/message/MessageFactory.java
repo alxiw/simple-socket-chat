@@ -13,7 +13,7 @@ public class MessageFactory {
             return new HistoryMessage(text, out);
         } else if (command == Command.REGISTER){
             return new LoginMessage(text, out);
-        }else {
+        } else {
             return null;
         }
     }

@@ -8,9 +8,14 @@ import java.io.OutputStream;
 import java.util.*;
 
 public class ServerState {
+    private volatile static long anonUserCount = 0;
     private volatile static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static File messageHistoryPath = new File("history.ser");
     public volatile static LinkedList<Message> messageHistory = new LinkedList<>();
+
+    public static Set<String> getLoginSet() {
+        return loginSet;
+    }
 
     private volatile static Set<String> loginSet = new HashSet<>();
 
@@ -36,9 +41,13 @@ public class ServerState {
     public static void addClientOut(ObjectOutputStream out){
         String userName = userStreamMap.get(out);
         if (userName == null){
-            userName = "anon";
+            userName = getAnonymousName();
         }
         userStreamMap.putIfAbsent(out, userName);
+    }
+
+    private static String getAnonymousName() {
+        return "anonymous#" + anonUserCount++;
     }
 
     public static boolean userExist(String name){

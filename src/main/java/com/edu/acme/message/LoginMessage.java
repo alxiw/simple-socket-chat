@@ -35,6 +35,10 @@ public class LoginMessage extends Message {
             return;
         }
         ServerState.addNewUser(text);
+        String prevUserName = ServerState.getUserStreamMap().get(out);
+        if(out != null){
+            ServerState.getLoginSet().remove(prevUserName);
+        }
         ServerState.getUserStreamMap().replace(out, text);
     }
 }
