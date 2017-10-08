@@ -3,9 +3,12 @@ package com.edu.acme.message;
 import com.edu.acme.Command;
 
 /**
- * Класс, служащий для проверки строки на корректное сообшение
+ * Класс, служащий для проверки строки сообщения на корректность
  */
 public class MessageValidator {
+    /**
+     * Поле - максимальная длина сообщения
+     */
     private static final int MAX_MESSAGE_LENGTH = 150;
     private static final String HELP_MESSAGE = "Use /snd {message} to send message, /hist to receive all messages, " +
             "/chid to register or /chroom to change room";
