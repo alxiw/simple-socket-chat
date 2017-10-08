@@ -3,9 +3,12 @@ package com.edu.acme.message;
 import com.edu.acme.Command;
 
 /**
- * Класс, служащий для проверки строки на корректное сообшение
+ * Класс, служащий для проверки строки сообщения на корректность
  */
 public class MessageValidator {
+    /**
+     * Поле - максимальная длина сообщения
+     */
     private static final int MAX_MESSAGE_LENGTH = 150;
 
     /**
