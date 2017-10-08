@@ -1,6 +1,6 @@
 package com.edu.acme;
 
-import com.edu.acme.message.MessageFactory;
+import com.edu.acme.message.MessageCreator;
 import com.edu.acme.message.MessageValidator;
 
 import java.io.*;
@@ -61,9 +61,9 @@ public class ClientApp {
         if (errorMessage == null) {
             String[] messageParts = message.split("\\s+", 2);
             if(messageParts.length > 1){
-                out.writeObject(MessageFactory.createMessage(Command.get(messageParts[0]), messageParts[1], out));
+                out.writeObject(MessageCreator.createMessage(Command.get(messageParts[0]), messageParts[1], out));
             } else {
-                out.writeObject(MessageFactory.createMessage(Command.get(messageParts[0]), null, out));
+                out.writeObject(MessageCreator.createMessage(Command.get(messageParts[0]), null, out));
             }
             out.flush();
         } else {

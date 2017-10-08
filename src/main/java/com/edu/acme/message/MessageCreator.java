@@ -5,8 +5,8 @@ import com.edu.acme.Command;
 import java.io.ObjectOutputStream;
 
 
-public class MessageFactory {
-    private MessageFactory() {
+public class MessageCreator {
+    private MessageCreator() {
     }
 
     public static Message createMessage(Command command, String text, ObjectOutputStream out) {
