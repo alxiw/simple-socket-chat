@@ -27,7 +27,7 @@ public class HistoryMessage extends Message {
     public void process(ObjectOutputStream out) {
         UserInfo userInfo = ServerState.getUserStreamMap().get(out);
         String room = userInfo.getRoom();
-        LinkedList<TextMessage> messages = History.readMessages(room, 5);
+        LinkedList<TextMessage> messages = History.readMessages(room);
         if (messages.size() == 0) {
             try {
                 out.writeObject(new ServerMessage("History is empty"));
