@@ -38,7 +38,7 @@ public class TextMessage extends Message {
                     entry.getKey().writeObject(this);
                 }
             } catch (SocketException e) {
-                ServerState.getLoginSet().remove(out);
+                ServerState.getUserStreamMap().remove(out);
             } catch (IOException e) {
                 e.printStackTrace();
             }
