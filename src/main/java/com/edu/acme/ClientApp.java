@@ -22,29 +22,31 @@ public class ClientApp {
                             socket.getInputStream())
             )
         ) {
-            new Thread(() -> {
-                readMessageLoop(messagesReader);
-            }).start();
+            new Thread(() -> readMessageLoop(messagesReader)).start();
 
             while (true) {
                 String message = consoleReader.readLine();
-                try {
-                    messageValidator.validate(message);
-                    //TODO: вынести split и if else в отдельный метод
-                    String[] messageParts = message.split("\\s+", 2);
-                    if(messageParts.length > 1){
-                        out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1]));
-                    } else {
-                        out.writeObject(MessageFactory.createMessage(messageParts[0], null));
-                    }
-                    out.flush();
-                }catch (InvalidMessageException e) {
-                    System.err.println(e.getMessage());
-                }
+                createMessageAndSend(out, message);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void createMessageAndSend(ObjectOutputStream out, String message) throws IOException {
+        try {
+            messageValidator.validate(message);
+            //TODO: вынести split и if else в отдельный метод
+            String[] messageParts = message.split("\\s+", 2);
+            if(messageParts.length > 1){
+                out.writeObject(MessageFactory.createMessage(messageParts[0], messageParts[1]));
+            } else {
+                out.writeObject(MessageFactory.createMessage(messageParts[0], null));
+            }
+            out.flush();
+        }catch (InvalidMessageException e) {
+            System.err.println(e.getMessage());
         }
     }
 

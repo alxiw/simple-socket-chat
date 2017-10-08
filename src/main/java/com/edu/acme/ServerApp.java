@@ -16,6 +16,7 @@ public class ServerApp {
         ) {
             while (true) {
                 Socket client = server.accept();
+                System.out.println("New connection");
                 new Thread(() -> readFromClient(client)).start();
             }
         } catch (IOException e) {
@@ -42,6 +43,5 @@ public class ServerApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("New connection");
     }
 }

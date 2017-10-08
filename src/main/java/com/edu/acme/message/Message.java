@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Класс, представляющий собой сообщение, посылаемое серверу.
+ */
 public abstract class Message implements Serializable {
     private String text;
     private String time;
