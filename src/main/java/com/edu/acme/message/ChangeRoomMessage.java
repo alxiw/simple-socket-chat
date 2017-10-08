@@ -37,18 +37,35 @@ public class ChangeRoomMessage extends Message{
             }
         }
 
+        handeRoomChange(out, userInfo);
+    }
+
+    private void handeRoomChange(ObjectOutputStream out, UserInfo userInfo) {
         UserInfo newUserInfo = new UserInfo(userInfo.getUsername(), text);
         ServerState.getUserStreamMap().put(out, newUserInfo);
         try{
             for (Map.Entry<ObjectOutputStream, UserInfo> entry : ServerState.getUserStreamMap().entrySet()){
-                if (entry.getValue().getRoom().equals(userInfo.getRoom())){
-                    entry.getKey().writeObject(new ServerMessage(
-                            "user " + userInfo.getUsername() + " changed room to " + newUserInfo.getRoom()));
-                }
+                sendMessageToOldRoomUsers(userInfo, newUserInfo, entry);
+                sendMessageToNewRoomUsers(userInfo, newUserInfo, entry);
             }
-            out.writeObject(new ServerMessage("You are in room " + text + " now"));
         } catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    private void sendMessageToNewRoomUsers(UserInfo userInfo, UserInfo newUserInfo, Map.Entry<ObjectOutputStream,
+            UserInfo> entry) throws IOException {
+        if (entry.getValue().getRoom().equals(newUserInfo.getRoom())){
+            entry.getKey().writeObject(new ServerMessage(
+                    "user " + userInfo.getUsername() + " joined the room "));
+        }
+    }
+
+    private void sendMessageToOldRoomUsers(UserInfo userInfo, UserInfo newUserInfo, Map.Entry<ObjectOutputStream,
+            UserInfo> entry) throws IOException {
+        if (entry.getValue().getRoom().equals(userInfo.getRoom())){
+            entry.getKey().writeObject(new ServerMessage(
+                    "user " + userInfo.getUsername() + " changed room to " + newUserInfo.getRoom()));
         }
     }
 }
