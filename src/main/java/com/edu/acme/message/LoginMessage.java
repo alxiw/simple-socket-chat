@@ -20,6 +20,9 @@ public class LoginMessage extends Message {
     public LoginMessage(String userName, ObjectOutputStream out) {
         super(userName);
         this.out = out;
+        if(userName != null){
+            this.text = userName.trim();
+        }
     }
 
     @Override

@@ -13,7 +13,6 @@ public class ServerState {
 
     public static final String DEFAULT_ROOM = "default";
 
-    private volatile static List<ObjectOutputStream> clientOutList = new LinkedList<>();
     private static File messageHistoryPath = new File("history.ser");
     public volatile static LinkedList<Message> messageHistory = new LinkedList<>();
 
@@ -29,18 +28,6 @@ public class ServerState {
 
     private volatile static Map<ObjectOutputStream, UserInfo> userStreamMap = new HashMap<>();
 
-    public static List<ObjectOutputStream> getClientOutList() {
-        //return clientOutList;
-        return new LinkedList<>(userStreamMap.keySet());
-    }
-
-    public static void removeClientOut(ObjectOutputStream out) {
-        clientOutList.remove(out);
-    }
-
-   /* public static void addClientOut(ObjectOutputStream out) {
-        clientOutList.add(out);
-    }*/
 
     public static void addClientOut(ObjectOutputStream out){
         UserInfo userInfo = userStreamMap.get(out);
