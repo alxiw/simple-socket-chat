@@ -1,6 +1,5 @@
-package com.edu.acme.message;
+package com.github.alxiw.simplesocketchat.common;
 
-import com.edu.acme.Command;
 import java.io.ObjectOutputStream;
 
 

@@ -1,9 +1,8 @@
-package com.edu.acme.message;
+package com.github.alxiw.simplesocketchat.common;
 
-import com.edu.acme.Command;
-import com.edu.acme.History;
-import com.edu.acme.ServerState;
-import com.edu.acme.UserInfo;
+import com.github.alxiw.simplesocketchat.server.History;
+import com.github.alxiw.simplesocketchat.server.ServerState;
+import com.github.alxiw.simplesocketchat.server.User;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -23,8 +22,8 @@ public class HistoryMessage extends Message {
 
     @Override
     public void process(ObjectOutputStream out) {
-        UserInfo userInfo = ServerState.getUserStreamMap().get(out);
-        String room = userInfo.getRoom();
+        User user = ServerState.getUserStreamMap().get(out);
+        String room = user.getRoom();
         LinkedList<TextMessage> messages = History.readMessages(room);
         if (messages.size() == 0) {
             try {

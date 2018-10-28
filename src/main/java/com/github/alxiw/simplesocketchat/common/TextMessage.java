@@ -1,9 +1,8 @@
-package com.edu.acme.message;
+package com.github.alxiw.simplesocketchat.common;
 
-import com.edu.acme.Command;
-import com.edu.acme.History;
-import com.edu.acme.ServerState;
-import com.edu.acme.UserInfo;
+import com.github.alxiw.simplesocketchat.server.History;
+import com.github.alxiw.simplesocketchat.server.ServerState;
+import com.github.alxiw.simplesocketchat.server.User;
 
 import java.io.*;
 import java.net.SocketException;
@@ -24,16 +23,16 @@ public class TextMessage extends Message {
     @Override
     public void process(ObjectOutputStream out) {
         this.setCurrentTime();
-        this.text = ServerState.getUserStreamMap().get(out).getUsername() + ": " + text;
+        this.text = ServerState.getUserStreamMap().get(out).getName() + ": " + text;
         sendMessageToAllRoomUsers(out);
         saveToHistory(out);
     }
 
     private void sendMessageToAllRoomUsers(ObjectOutputStream out) {
-        UserInfo userInfo = ServerState.getUserStreamMap().get(out);
-        for (Map.Entry<ObjectOutputStream, UserInfo> entry : ServerState.getUserStreamMap().entrySet()){
+        User user = ServerState.getUserStreamMap().get(out);
+        for (Map.Entry<ObjectOutputStream, User> entry : ServerState.getUserStreamMap().entrySet()){
             try {
-                if (entry.getValue().getRoom().equals(userInfo.getRoom())) {
+                if (entry.getValue().getRoom().equals(user.getRoom())) {
                     entry.getKey().writeObject(this);
                 }
             } catch (SocketException e) {
@@ -45,8 +44,8 @@ public class TextMessage extends Message {
     }
 
     private void saveToHistory(ObjectOutputStream out) {
-        UserInfo userInfo = ServerState.getUserStreamMap().get(out);
-        String room = userInfo.getRoom();
+        User user = ServerState.getUserStreamMap().get(out);
+        String room = user.getRoom();
         History.saveMessage(this, room);
     }
 

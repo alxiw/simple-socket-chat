@@ -1,13 +1,15 @@
-package com.edu.acme;
+package com.github.alxiw.simplesocketchat.server;
 
 import java.io.ObjectOutputStream;
 import java.util.*;
 
 
 public class ServerState {
-    private volatile static long anonUserCount = 0;
+
+    private static volatile long anonUserCount = 0;
 
     private ServerState() {
+        //private constructor
     }
 
     public static final String DEFAULT_ROOM = "default";
@@ -16,22 +18,22 @@ public class ServerState {
         return loginSet;
     }
 
-    private volatile static Set<String> loginSet = new HashSet<>();
+    private static volatile Set<String> loginSet = new HashSet<>();
 
 
-    public static Map<ObjectOutputStream, UserInfo> getUserStreamMap() {
+    public static Map<ObjectOutputStream, User> getUserStreamMap() {
         return userStreamMap;
     }
 
-    private volatile static Map<ObjectOutputStream, UserInfo> userStreamMap = new HashMap<>();
+    private static volatile Map<ObjectOutputStream, User> userStreamMap = new HashMap<>();
 
 
     public static void addClientOut(ObjectOutputStream out){
-        UserInfo userInfo = userStreamMap.get(out);
-        if (userInfo == null){
-            userInfo = new UserInfo(getAnonymousName());
+        User user = userStreamMap.get(out);
+        if (user == null){
+            user = new User(getAnonymousName());
         }
-        userStreamMap.putIfAbsent(out, userInfo);
+        userStreamMap.putIfAbsent(out, user);
     }
 
     private static String getAnonymousName() {
@@ -42,8 +44,8 @@ public class ServerState {
         return loginSet.contains(name);
     }
 
-
     public static void addNewUser(String username){
         loginSet.add(username);
     }
+
 }

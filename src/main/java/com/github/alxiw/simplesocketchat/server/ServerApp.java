@@ -1,6 +1,6 @@
-package com.edu.acme;
+package com.github.alxiw.simplesocketchat.server;
 
-import com.edu.acme.message.Message;
+import com.github.alxiw.simplesocketchat.common.Message;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,29 +9,28 @@ import java.net.SocketException;
 
 
 public class ServerApp {
+
     private ServerApp() {
+        //private constructor
     }
 
     private static final int PORT = 9999;
 
     public static void main(String[] args) {
-        try (ServerSocket server = new ServerSocket(PORT)
-        ) {
+        try (ServerSocket server = new ServerSocket(PORT)) {
             while (true) {
                 Socket client = server.accept();
                 System.out.println("New connection");
                 new Thread(() -> readFromClient(client)).start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
     private static void readFromClient(Socket client) {
-        try (
-                ObjectInputStream in = new ObjectInputStream(client.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())
-        ) {
+        try (ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+             ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream())) {
             ServerState.addClientOut(out);
             Message message;
             while (true) {

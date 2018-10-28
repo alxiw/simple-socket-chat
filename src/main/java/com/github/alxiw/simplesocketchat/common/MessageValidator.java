@@ -1,6 +1,4 @@
-package com.edu.acme.message;
-
-import com.edu.acme.Command;
+package com.github.alxiw.simplesocketchat.common;
 
 /**
  * Класс, служащий для проверки строки сообщения на корректность

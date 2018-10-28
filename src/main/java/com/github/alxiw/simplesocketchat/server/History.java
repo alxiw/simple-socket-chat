@@ -1,7 +1,7 @@
-package com.edu.acme;
+package com.github.alxiw.simplesocketchat.server;
 
-import com.edu.acme.message.Message;
-import com.edu.acme.message.TextMessage;
+import com.github.alxiw.simplesocketchat.common.Message;
+import com.github.alxiw.simplesocketchat.common.TextMessage;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 
 public class History {
+
     public static void saveMessage(Message message, String filename) {
         Gson gson = new Gson();
         try (PrintWriter out = new PrintWriter(new FileOutputStream(getPath(filename).toString(), true))) {
@@ -36,6 +37,7 @@ public class History {
     }
 
     private static Path getPath(String filename) {
-        return Paths.get(filename + ".ser");
+        return Paths.get(filename + ".txt");
     }
+
 }

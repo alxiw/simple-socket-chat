@@ -1,14 +1,10 @@
-package com.edu.acme.message;
+package com.github.alxiw.simplesocketchat.common;
 
-import com.edu.acme.Command;
-import com.edu.acme.ServerState;
-import com.edu.acme.UserInfo;
+import com.github.alxiw.simplesocketchat.server.ServerState;
+import com.github.alxiw.simplesocketchat.server.User;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.util.List;
 import java.util.Map;
 
 public class LoginMessage extends Message {
@@ -42,21 +38,21 @@ public class LoginMessage extends Message {
             return;
         }
         ServerState.addNewUser(text);
-        UserInfo prevUserInfo = ServerState.getUserStreamMap().get(out);
+        User prevUser = ServerState.getUserStreamMap().get(out);
 
         if(out != null){
-            handleNameChange(prevUserInfo.getUsername(), out);
+            handleNameChange(prevUser.getName(), out);
         }
 
-        ServerState.getUserStreamMap().replace(out, new UserInfo(text, prevUserInfo.getRoom()));
+        ServerState.getUserStreamMap().replace(out, new User(text, prevUser.getRoom()));
     }
 
     private void handleNameChange(String prevUserName, ObjectOutputStream out) {
         ServerState.getLoginSet().remove(prevUserName);
-        UserInfo userInfo = ServerState.getUserStreamMap().get(out);
+        User user = ServerState.getUserStreamMap().get(out);
         try {
-            for (Map.Entry<ObjectOutputStream, UserInfo> entry : ServerState.getUserStreamMap().entrySet()) {
-                if(userInfo.getRoom().equals(entry.getValue().getRoom())){
+            for (Map.Entry<ObjectOutputStream, User> entry : ServerState.getUserStreamMap().entrySet()) {
+                if(user.getRoom().equals(entry.getValue().getRoom())){
                     entry.getKey().writeObject(new ServerMessage(
                             "user " + prevUserName + " changed name to " + text));
                 }

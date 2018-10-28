@@ -1,15 +1,10 @@
-package com.edu.acme.message;
-
-import com.edu.acme.Command;
+package com.github.alxiw.simplesocketchat.common;
 
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Класс, описывающий вид сообщения, которыми обмениваются сервер с клиентами
- */
 public abstract class Message implements Serializable {
     /**
      * Поле текст сообщения
