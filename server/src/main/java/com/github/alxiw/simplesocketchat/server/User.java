@@ -1,16 +1,18 @@
-package com.github.alxiw.simplesocketchat.network;
+package com.github.alxiw.simplesocketchat.server;
 
 public class User {
 
+    public static final int DEFAULT_ROOM = 0;
+
     private String name;
-    private String room;
+    private int room;
 
     public User(String name) {
         this.name = name;
-        this.room = ServerState.DEFAULT_ROOM;
+        this.room = DEFAULT_ROOM;
     }
 
-    public User(String name, String room) {
+    public User(String name, int room) {
         this.name = name;
         this.room = room;
     }
@@ -23,11 +25,12 @@ public class User {
         this.name = name;
     }
 
-    public String getRoom() {
+    public int getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
+    public void setRoom(int room) {
         this.room = room;
     }
+
 }

@@ -11,6 +11,7 @@ target
 *.jar
 
 # Test and log files
+.putty
 *.log
 *.bat
 *.txt
